@@ -20,15 +20,24 @@ export default {
             datasets: [
                 {
                     label: xlabel,
-                    data: data_set
+                    data: this.getLabel,
+                    backgroundColor: "rgba(54,73,93,.5)",
+                    borderColor: "#36495d",
+                    borderWidth: 1
                 },
                 {
                     label: 'XRP',
-                    data: [0.2012, 0.2015, 0.2016, 0.2013, 0.2011, 0.2012, 0.2015, 0.2014, 0.2016, 0.2014, 0.2011, 0.2013, 0.2014, 0.2011, 0.2013, 0.2014, 0.2012, 0.2011, 0.2013, 0.2012, 0.2015, 0.2016, 0.2013, 0.2014, 0.2015]
+                    data: [0.2012, 0.2015, 0.2016, 0.2013, 0.2011, 0.2012, 0.2015, 0.2014, 0.2016, 0.2014, 0.2011, 0.2013, 0.2014, 0.2011, 0.2013, 0.2014, 0.2012, 0.2011, 0.2013, 0.2012, 0.2015, 0.2016, 0.2013, 0.2014, 0.2015],
+                    backgroundColor: "rgba(154,73,193,.5)",
+                    borderColor: "#36495d",
+                    borderWidth: 1
                 },
                 {
                     label: 'COTI',
-                    data: [0.2011, 0.2013, 0.2015, 0.2014, 0.2013, 0.2011, 0.2014, 0.2013, 0.2015, 0.2013, 0.2012, 0.2011, 0.2012, 0.2013, 0.2012, 0.2012, 0.2014, 0.2012, 0.2011, 0.2013, 0.2014, 0.2016, 0.2012, 0.2015, 0.2014]
+                    data: [0.2011, 0.2013, 0.2015, 0.2014, 0.2013, 0.2011, 0.2014, 0.2013, 0.2015, 0.2013, 0.2012, 0.2011, 0.2012, 0.2013, 0.2012, 0.2012, 0.2014, 0.2012, 0.2011, 0.2013, 0.2014, 0.2016, 0.2012, 0.2015, 0.2014],
+                    backgroundColor: "rgba(54,73,93,.5)",
+                    borderColor: "#36495d",
+                    borderWidth: 1
                 }
             ]
         },
@@ -42,7 +51,8 @@ export default {
                     bottom: 10
                 }
             }
-        }
+        },
+        ylabel: 'old'
         
       }
   },  
@@ -56,18 +66,28 @@ export default {
       options: this.options
 
     });
+    this.chartData = {...this.chartData, ...{}}
 
+  },
+  computed:{
+    getLabel:{
+      get(){
+        alert(this.ylabel)
+        return `${this.ylabel}`
+      }
+    }
   },
 
   async created() {
 
     this.getMessages()
+    //this.setOptions()
 
   },
 
   methods: {
 
-    getMessages() {
+    getMessages(){
       const ylabel = []
     //await api.get('/social-links.json').then(response => {
      api.get('/doge.json').then(response => {
@@ -75,12 +95,46 @@ export default {
         this.ylabel = response.data.map(({ data }) => data)
         //data_set.push(response.data.map(({ data }) => data))
         data_set.push(this.ylabel[0])
-        console.log(data_set)
-        
-    }).catch(e => {
-        this.errors.push(e)
-    });
+        //alert(data_set)
+        //console.log(data_set)          
+      }).catch(e => {
+          this.errors.push(e)
+      });
+    },
+
+    async setOptions(){
+      //const dados = []
+      await api.get('/doge.json').then(response => {
+        this.ylabel = response.data.map(({ data }) => data)
+        data_set.push(this.ylabel[0])
+        //this.ylabel = this.dados
+        //alert(data_set)
+        //return {dados}
+        //console.log(data_set)          
+      }).catch(e => {
+          this.errors.push(e)
+      });
+      //this.ylabel = [0.2012, 0.2015, 0.2016, 0.2013, 0.2011, 0.2012, 0.2015, 0.2014, 0.2016, 0.2014, 0.2011, 0.2013, 0.2014, 0.2011, 0.2013, 0.2014, 0.2012, 0.2011, 0.2013, 0.2012, 0.2015, 0.2016, 0.2013, 0.2014, 0.2015]
+      //alert(this.ylabel)
+      return data_set
+    },
+
+    async dogeCoin(){
+      await api.get('/doge.json').then(response => {
+        this.ylabel = response.data.map(({ data }) => data)[0]
+      }).catch(e => {
+          this.errors.push(e)
+      });
+      for(var i=0;i<this.ylabel.length;i++){
+        //alert(this.ylabel[i])
+        data_set.push(this.ylabel[i]);
+      }
+      alert(`${this.ylabel}`)      
+      return `${this.ylabel}`;
     }
+
+   
+
   }
   
 }
