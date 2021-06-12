@@ -22,6 +22,8 @@ export default api;
 
 npm run dev
 
+- url: https://purple-water-07e5feb10.azurestaticapps.net/
+
 references: 
 
 - https://www.youtube.com/watch?v=1W35ITPUp6Y
